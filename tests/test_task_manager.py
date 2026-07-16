@@ -1,5 +1,10 @@
 # tests/test_task_manager.py
+import os
+import sys
 from datetime import date
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from models.task import Task
 from services.task_manager import TaskManager
 
