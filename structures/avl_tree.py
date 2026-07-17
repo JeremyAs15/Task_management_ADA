@@ -43,7 +43,7 @@ class AVLTree:
         node.height = 1 + max(left_h, right_h)
 
     def _rotate_right(self, y):
-        """
+        r"""
         Rotación simple a la derecha (caso LL).
 
               y                x
@@ -65,7 +65,7 @@ class AVLTree:
         return x  # x es la nueva raíz de este pedazo
 
     def _rotate_left(self, x):
-        """
+        r"""
         Rotación simple a la izquierda (caso RR).
 
             x                    y

@@ -10,7 +10,77 @@ Ambas estructuras se mantienen sincronizadas a través del `TaskManager`, que es
 ## Requisitos
 
 - Python 3.10 o superior (probado con Python 3.12).
-- No requiere librerías externas por ahora (`requirements.txt` está vacío; se irá llenando cuando se agregue la GUI).
+- **Tkinter** (incluido en la mayoría de instalaciones de Python, ver instrucciones abajo).
+
+## Instalación de Tkinter
+
+Tkinter es la librería gráfica estándar de Python. Dependiendo del sistema operativo:
+
+### 🪟 Windows
+
+En Windows, Tkinter viene incluido con el instalador oficial de Python. Asegúrate de marcar la opción **"tcl/tk and IDLE"** durante la instalación.
+
+Si ya tienes Python instalado y Tkinter no está disponible, reinstálalo desde [python.org](https://www.python.org/downloads/) marcando esa opción.
+
+Para verificar que funciona:
+```bash
+python -m tkinter
+```
+
+### 🍎 macOS
+
+En macOS, la versión de Python del sistema no incluye Tkinter. Se recomienda instalar Python con Homebrew:
+
+```bash
+# Instalar Homebrew si no lo tienes
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Instalar Python con soporte de Tkinter
+brew install python-tk
+
+# O si quieres una versión específica, por ejemplo 3.13:
+brew install python-tk@3.13
+```
+
+Para verificar que funciona:
+```bash
+python3 -m tkinter
+```
+
+### 🐧 Linux
+
+En la mayoría de distribuciones Linux, Tkinter debe instalarse por separado:
+
+**Ubuntu / Debian:**
+```bash
+sudo apt update
+sudo apt install python3-tk
+```
+
+**Fedora / RHEL / CentOS:**
+```bash
+sudo dnf install python3-tkinter
+```
+
+**Arch Linux:**
+```bash
+sudo pacman -S tk
+```
+
+Para verificar que funciona:
+```bash
+python3 -m tkinter
+```
+
+## Ejecutar la aplicación
+
+```bash
+# En macOS / Linux
+python3 main.py
+
+# En Windows
+python main.py
+```
 
 ## Estructura del proyecto
 
@@ -78,5 +148,5 @@ La prioridad de una tarea se define como `1 = Baja`, `2 = Media`, `3 = Alta`. An
 - [x] Árbol AVL con inserción, búsqueda, eliminación y reequilibrio automático
 - [x] `TaskManager` que sincroniza ambas estructuras
 - [x] Pruebas unitarias de heap, AVL y `TaskManager`
-- [ ] Interfaz gráfica (GUI)
-- [ ] Punto de entrada (`main.py`)
+- [x] Interfaz gráfica (GUI)
+- [x] Punto de entrada (`main.py`)
