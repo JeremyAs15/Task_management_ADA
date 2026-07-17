@@ -40,9 +40,10 @@ def test_heap_vacio():
 def test_insercion_y_orden_de_extraccion():
     # Caso del PDF: Alta, Media, Baja -> debe salir primero la de Alta
     heap = MaxHeap()
-    heap.insert(crear_tarea(101, "Estudiar para el examen", 3))
-    heap.insert(crear_tarea(102, "Comprar útiles escolares", 2))
-    heap.insert(crear_tarea(103, "Revisar correos electrónicos", 1))
+    # 0=Baja, 1=Media, 2=Alta
+    heap.insert(crear_tarea(101, "Estudiar para el examen", 2))
+    heap.insert(crear_tarea(102, "Comprar útiles escolares", 1))
+    heap.insert(crear_tarea(103, "Revisar correos electrónicos", 0))
 
     assert heap.size() == 3
     assert heap.peek().id == 101  # la más urgente, sin sacarla
@@ -54,14 +55,14 @@ def test_insercion_y_orden_de_extraccion():
 
 
 def test_desempate_por_fecha():
-    # misma prioridad: gana la fecha más próxima; sin fecha es lo menos urgente
+    # misma prioridad: gana la fecha más próxima (sin fecha = hoy)
     heap = MaxHeap()
-    heap.insert(crear_tarea(1, "Lejana", 2, date(2026, 12, 1)))
-    heap.insert(crear_tarea(2, "Cercana", 2, date(2026, 7, 20)))
-    heap.insert(crear_tarea(3, "Sin fecha", 2))
+    heap.insert(crear_tarea(1, "Lejana", 1, date(2026, 12, 1)))
+    heap.insert(crear_tarea(2, "Cercana", 1, date(2026, 7, 20)))
+    heap.insert(crear_tarea(3, "Hoy", 1))  # None → hoy → la más cercana
 
     orden = [heap.extract_max().id for _ in range(3)]
-    assert orden == [2, 1, 3]
+    assert orden == [3, 2, 1]
     print("OK: desempate por fecha de vencimiento")
 
 
