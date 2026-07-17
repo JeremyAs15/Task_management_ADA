@@ -94,12 +94,12 @@ Task_management_ADA/
 ├── services/
 │   └── task_manager.py     # Une heap + AVL: agregar, buscar, completar tareas
 ├── gui/
-│   └── app.py              # Interfaz gráfica (pendiente)
+│   └── app.py              # Interfaz gráfica minimalista (notas B/N)
 ├── tests/
 │   ├── test_avl.py
 │   ├── test_heap.py
 │   └── test_task_manager.py
-└── main.py                  # Punto de entrada (pendiente)
+└── main.py                  # Punto de entrada
 ```
 
 ## Cómo correr las pruebas
@@ -128,19 +128,23 @@ from services.task_manager import TaskManager
 
 manager = TaskManager()
 
-manager.add_task(Task(101, "Estudiar para el examen", 3, date(2026, 7, 20)))  # prioridad alta
-manager.add_task(Task(102, "Comprar útiles escolares", 2))                     # prioridad media
-manager.add_task(Task(103, "Revisar correos electrónicos", 1))                # prioridad baja
+# ID automático (recomendado desde la GUI)
+manager.create_task("Estudiar para el examen", 2, date(2026, 7, 20))  # Alta
+manager.create_task("Comprar útiles escolares", 1)                     # Media
+manager.create_task("Revisar correos electrónicos", 0)                # Baja
 
-manager.get_most_urgent()      # -> tarea 101 (la más urgente, sin sacarla)
-manager.find_task(102)         # -> búsqueda por ID en el AVL
+# También se puede insertar con ID manual (tests / demos)
+manager.add_task(Task(101, "Otra tarea", 2, date(2026, 7, 20)))
+
+manager.get_most_urgent()      # -> la más urgente, sin sacarla
+manager.find_task(1)           # -> búsqueda por ID en el AVL
 manager.complete_urgent()      # -> saca la más urgente del heap y del AVL
-manager.complete_by_id(102)    # -> completa una tarea puntual por su ID
+manager.complete_by_id(2)      # -> completa una tarea puntual por su ID
 manager.list_tasks()           # -> todas las tareas ordenadas por ID
 manager.balance_report()       # -> (id, altura, factor de balance) de cada nodo del AVL
 ```
 
-La prioridad de una tarea se define como `1 = Baja`, `2 = Media`, `3 = Alta`. Ante empate de prioridad, gana la tarea con fecha de vencimiento más próxima.
+Prioridad: `0 = Baja`, `1 = Media`, `2 = Alta`. Ante empate, gana la fecha más próxima; si no hay fecha, es la menos urgente. El ID de la GUI se asigna solo.
 
 ## Estado del proyecto
 

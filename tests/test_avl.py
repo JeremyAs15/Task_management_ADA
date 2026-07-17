@@ -24,9 +24,9 @@ def test_arbol_vacio():
 
 def test_insercion_y_busqueda():
     avl = AVLTree()
-    avl.insert(crear_tarea(101, "Estudiar", 3))
-    avl.insert(crear_tarea(102, "Comprar", 2))
-    avl.insert(crear_tarea(103, "Correos", 1))
+    avl.insert(crear_tarea(101, "Estudiar", 2))
+    avl.insert(crear_tarea(102, "Comprar", 1))
+    avl.insert(crear_tarea(103, "Correos", 0))
 
     t = avl.search(102)
     assert t is not None
@@ -81,12 +81,12 @@ def test_equilibrio_secuencia_desbalanceada():
 
 def test_actualizar_id_duplicado():
     avl = AVLTree()
-    avl.insert(crear_tarea(101, "Vieja", 1))
-    avl.insert(crear_tarea(101, "Nueva", 3))
+    avl.insert(crear_tarea(101, "Vieja", 0))
+    avl.insert(crear_tarea(101, "Nueva", 2))
 
     t = avl.search(101)
     assert t.description == "Nueva"
-    assert t.priority == 3
+    assert t.priority == 2
     print("OK: actualizar tarea con mismo ID")
 
 

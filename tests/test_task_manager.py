@@ -12,15 +12,14 @@ from services.task_manager import TaskManager
 def test_ejemplo_del_pdf():
     m = TaskManager()
 
-    m.add_task(Task(101, "Estudiar para el examen", 3, date(2026, 7, 20)))
-    m.add_task(Task(102, "Comprar útiles", 2, date(2026, 7, 18)))
-    m.add_task(Task(103, "Revisar correos", 1))
+    # 0=Baja, 1=Media, 2=Alta
+    m.add_task(Task(101, "Estudiar para el examen", 2, date(2026, 7, 20)))
+    m.add_task(Task(102, "Comprar útiles", 1, date(2026, 7, 18)))
+    m.add_task(Task(103, "Revisar correos", 0))
 
-    # la más urgente es la 101
     urgente = m.get_most_urgent()
     assert urgente.id == 101
 
-    # buscar por ID en AVL
     t = m.find_task(102)
     assert t is not None
     assert t.description == "Comprar útiles"
@@ -30,15 +29,28 @@ def test_ejemplo_del_pdf():
     print("Buscar 102:", t)
 
 
+def test_create_task_id_automatico():
+    m = TaskManager()
+    t1 = m.create_task("Primera", 1)
+    t2 = m.create_task("Segunda", 2)
+    t3 = m.create_task("Tercera", 0)
+
+    assert t1.id == 1
+    assert t2.id == 2
+    assert t3.id == 3
+    assert m.find_task(2).description == "Segunda"
+    assert m.get_most_urgent().id == 2  # Alta
+    print("OK: create_task asigna IDs automáticos")
+
+
 def test_complete_urgent_sincroniza():
     m = TaskManager()
-    m.add_task(Task(101, "Alta", 3))
-    m.add_task(Task(102, "Media", 2))
+    m.add_task(Task(101, "Alta", 2))
+    m.add_task(Task(102, "Media", 1))
 
     completada = m.complete_urgent()
     assert completada.id == 101
 
-    # ya no debe existir en ninguna estructura
     assert m.find_task(101) is None
     assert m.get_most_urgent().id == 102
 
@@ -49,14 +61,14 @@ def test_complete_urgent_sincroniza():
 
 def test_complete_by_id_sincroniza():
     m = TaskManager()
-    m.add_task(Task(101, "Alta", 3))
-    m.add_task(Task(102, "Media", 2))
-    m.add_task(Task(103, "Baja", 1))
+    m.add_task(Task(101, "Alta", 2))
+    m.add_task(Task(102, "Media", 1))
+    m.add_task(Task(103, "Baja", 0))
 
     completada = m.complete_by_id(102)
     assert completada.id == 102
     assert m.find_task(102) is None
-    assert m.get_most_urgent().id == 101  # sigue siendo la más urgente
+    assert m.get_most_urgent().id == 101
 
     ids = [t.id for t in m.list_tasks()]
     assert ids == [101, 103]
@@ -65,8 +77,8 @@ def test_complete_by_id_sincroniza():
 
 def test_no_duplicar_ids():
     m = TaskManager()
-    ok1 = m.add_task(Task(101, "Una", 1))
-    ok2 = m.add_task(Task(101, "Otra", 3))
+    ok1 = m.add_task(Task(101, "Una", 0))
+    ok2 = m.add_task(Task(101, "Otra", 2))
 
     assert ok1 is True
     assert ok2 is False
@@ -86,10 +98,22 @@ def test_balance_report_desde_manager():
     print("OK: balance_report desde TaskManager")
 
 
+def test_editar_solo_descripcion():
+    m = TaskManager()
+    t = m.create_task("Texto viejo", 1)
+    updated = m.update_description(t.id, "Texto nuevo")
+    assert updated is not None
+    assert m.find_task(t.id).description == "Texto nuevo"
+    assert m.update_description(t.id, "   ") is None  # vacío no vale
+    print("OK: update_description solo cambia el texto")
+
+
 if __name__ == "__main__":
     test_ejemplo_del_pdf()
+    test_create_task_id_automatico()
     test_complete_urgent_sincroniza()
     test_complete_by_id_sincroniza()
     test_no_duplicar_ids()
     test_balance_report_desde_manager()
+    test_editar_solo_descripcion()
     print("\nTodas las pruebas TaskManager pasaron.")
